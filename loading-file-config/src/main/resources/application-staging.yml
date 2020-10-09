@@ -1,0 +1,6 @@
+## Override properties for staging environment
+app:
+  name: ConfigurationPropertiesDemoApp-STAGING
+  security:
+    username: callicoder-staging
+    password: C@ll1C0d3r

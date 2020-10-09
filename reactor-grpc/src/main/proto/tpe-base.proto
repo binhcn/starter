@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "zalopay.entity.protobuf.tpe";
+option java_outer_classname = "Tpe";
+
+package tpe;
+
+service ZPBase {
+    rpc sendRequest (GrpcBaseRequest) returns (GrpcBaseResponse) {}
+    rpc sendRequestV2 (GrpcBaseRequestV2) returns (GrpcBaseResponse) {}
+}
+
+message GrpcBaseRequest {
+    string methodName = 1;
+    map<string, string> params = 2;
+}
+
+message GrpcBaseResponse {
+    string response = 1;
+}
+
+message NameValuePair {
+    string name = 1;
+    string value = 2;
+}
+
+message GrpcBaseRequestV2 {
+    string methodName = 1;
+    repeated NameValuePair params = 2;
+}

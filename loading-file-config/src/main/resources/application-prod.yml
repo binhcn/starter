@@ -1,0 +1,6 @@
+## Override properties for prod environment
+app:
+  name: ConfigurationPropertiesDemoApp-PRODUCTION
+  security:
+    username: callicoder-prod
+    password: C@ll1C0d3r

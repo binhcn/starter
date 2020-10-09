@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "zalopay.entity.protobuf.external";
+option java_outer_classname = "CashierExternal";
+package external.v1;
+
+import "cashier-v1.proto";
+
+message PromotionRequest {
+  string system_id = 1;
+  int64 req_date = 2;
+  string user_id = 3;
+}
+
+message PromotionResponse {
+  int32 return_code = 1;
+  string return_message = 2;
+  repeated cashier.v1.Promotion promotion = 3;
+}
+
+message UserAssetRequest{
+  string user_id = 1;
+}
+
+message UserAssetResponse{
+  int32 return_code = 1;
+  string return_message = 2;
+  cashier.v1.UserAsset user_asset= 3;
+}
+
+service ExternalService {
+  rpc getPromotion (PromotionRequest) returns (PromotionResponse);
+  rpc getUserBalance (UserAssetRequest) returns (UserAssetResponse);
+}

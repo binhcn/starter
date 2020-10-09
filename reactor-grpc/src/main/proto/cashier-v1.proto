@@ -1,0 +1,118 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "zalopay.entity.protobuf.cashier.v1";
+option java_outer_classname = "Cashier";
+package cashier.v1;
+
+/**
+ * common noted
+ * system_id = format ( domain_name + module)
+ * req_date = time client sent request to server
+ */
+
+message PingRequest {
+    int64 timestamp = 1;
+}
+
+message PingResponse {
+    int64 timestamp = 1;
+    string message = 2;
+}
+
+/**
+ * if order created in tpe system, order_info contain order_token
+ * if order created in other system, use order_info full order info
+ */
+message ConsultPayViewRequest {
+    string user_id = 1;
+    OrderInfo order_info = 2;
+    ClientInfo client_info = 3;
+    string system_id = 4;
+    int64 req_date = 5;
+}
+
+message ConsultPayViewResponse {
+    int32 return_code = 1;
+    string return_message = 2;
+    OrderInfo order_info = 3;
+    repeated UserAsset user_assets = 4;
+    repeated Promotion promotions = 5;
+}
+
+message ChangePayViewRequest {
+    string user_id = 1;
+    string order_token = 2;
+    repeated UserAsset user_asset = 3;
+    string campaign_code = 4;
+    string system_id = 5;
+    int64 req_date = 6;
+}
+
+message ChangePayViewResponse {
+    int32 return_code = 1;
+    string return_message = 2;
+    repeated UserAsset user_assets = 3;
+}
+
+message ClientInfo {
+    string device_id = 1;
+    string platform = 2;
+    string app_version = 3;
+}
+
+message OrderInfo {
+    int32 app_id = 1;
+    string app_trans_id = 2;
+    int64 amount = 3;
+    string item = 4;
+    string embeddata = 5;
+    string description = 6;
+    string app_user = 7;
+    int64 app_time = 8;
+    string mac = 9;
+    string sub_app_user = 10;
+    string sub_app_id = 11;
+    string order_token = 12;
+}
+
+message UserAsset {
+    int32 pmc_id = 1;
+    int64 balance = 2;
+    int32 status = 3;
+    string bank_code = 4;
+    string cc_bank_code = 5;
+    string bank_connector_code = 6;
+    int64 min_amount = 7;
+    int64 max_amount = 8;
+    int32 require_otp = 9;
+    int64 fee = 10;
+}
+
+message Asset {
+    int32 pmc_id = 1;
+    string bank_code = 2;
+    string cc_bank_code = 3;
+    string bank_connector_code =4;
+}
+
+message Promotion {
+    string campaign_code = 1;
+    string campaign_id = 2;
+    repeated Asset assets = 3;
+    int64 min_amount = 4;
+    int64 discount_amount = 5;
+    float discount_percent = 6;
+    string min_app_version = 7;
+    string description = 8;
+    string hint = 9;
+    int64 start_date = 10;
+    int64 end_date = 11;
+    string campaign_name = 12;
+}
+
+service CashierService {
+    rpc Ping (PingRequest) returns (PingResponse);
+    rpc ConsultPayView (ConsultPayViewRequest) returns (ConsultPayViewResponse);
+    rpc ChangePayView (ChangePayViewRequest) returns (ChangePayViewResponse);
+}
