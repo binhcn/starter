@@ -23,7 +23,7 @@ public class TpeOrderInfoDemo {
     RequestBody formBody = new FormBody.Builder()
         .build();
 
-    RequestBody jsonBody = RequestBody.create(MediaType.parse("application/json"), "");
+    RequestBody jsonBody = RequestBody.create("", MediaType.parse("application/json"));
 
     HttpUrl.Builder urlBuilder = HttpUrl.parse("http://10.50.1.9:9713/v001/tpe/zpi/getorderinfo").newBuilder();
     urlBuilder.addQueryParameter("appid", "606");

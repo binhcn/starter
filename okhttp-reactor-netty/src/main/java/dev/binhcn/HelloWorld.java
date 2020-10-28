@@ -5,8 +5,10 @@ import dev.binhcn.reactor.ReactorNettyCallFactory;
 import java.io.IOException;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +23,20 @@ public class HelloWorld {
         .header("Content-Type", "application/json")
         .build();
 
-//    Response response = client.newCall(request).execute();
+    Response response = client.newCall(request).execute();
+    Mono<Response> responseMono = Mono.just(response);
+    Mono<ResponseBody> responseBodyMono = responseMono.map(res -> {
+      return res.body();
+    });
+    responseBodyMono.map(res -> {
+      String result = null;
+      try {
+        result = res.string();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      return result;
+    }).subscribe(System.out::println);
 //    String body = response.body().string();
 //    System.out.println(body);
 //    System.out.println(response.toString());
@@ -61,32 +76,32 @@ public class HelloWorld {
 //      }
 //    });
 
-    System.out.println("call reactor:");
-    ReactorNettyCallFactory nettyCallFactory = new ReactorNettyCallFactory();
-    ReactorNettyCall reactorNettyCall = nettyCallFactory.newCall(request);
-    Mono<Response> responseMono = reactorNettyCall.getExecutable().map(response -> {
-      ResponseBody responseBody = response.body();
-      System.out.println(responseBody);
-      return response;
-    });
-
-    reactorNettyCall.setExecutable(responseMono);
-
-
-    reactorNettyCall.enqueue(new Callback() {
-      @Override
-      public void onFailure(@NotNull Call call, @NotNull IOException e) {
-        System.out.printf("You called failure with {} and message: {}\n",
-            e, e.getMessage());
-      }
-
-      @Override
-      public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-        String body = response.body().string();
-        System.out.println(body);
-        System.out.println(response.toString());
-      }
-    });
+//    System.out.println("call reactor:");
+//    ReactorNettyCallFactory nettyCallFactory = new ReactorNettyCallFactory();
+//    ReactorNettyCall reactorNettyCall = nettyCallFactory.newCall(request);
+//    Mono<Response> responseMono = reactorNettyCall.getExecutable().map(response -> {
+//      ResponseBody responseBody = response.body();
+//      System.out.println(responseBody);
+//      return response;
+//    });
+//
+//    reactorNettyCall.setExecutable(responseMono);
+//
+//
+//    reactorNettyCall.enqueue(new Callback() {
+//      @Override
+//      public void onFailure(@NotNull Call call, @NotNull IOException e) {
+//        System.out.printf("You called failure with {} and message: {}\n",
+//            e, e.getMessage());
+//      }
+//
+//      @Override
+//      public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+//        String body = response.body().string();
+//        System.out.println(body);
+//        System.out.println(response.toString());
+//      }
+//    });
     
 
     Thread.sleep(10000);
